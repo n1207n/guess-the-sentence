@@ -2,7 +2,12 @@
   "presets": [
     "latest",
     "react",
+    "flow",
     "stage-1"
+  ],
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-es2015-modules-commonjs"
   ],
   "env": {
     "development": {
