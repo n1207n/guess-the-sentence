@@ -25,5 +25,5 @@ app.use(middlewares());
   }
 
   await app.listen(3001);
-  console.log(`Application started on port ${3000}`);
+  console.log(`Application started on port ${3001}`);
 })();

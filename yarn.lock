@@ -5394,6 +5394,12 @@ mongodb@2.2.24, mongodb@^2.0.42:
     mongodb-core "2.1.8"
     readable-stream "2.1.5"
 
+mongoose-fill@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/mongoose-fill/-/mongoose-fill-1.6.0.tgz#cab35e123821fb88baf05b010c9875ebab09e9b5"
+  dependencies:
+    async "^1.4.2"
+
 mongoose@^4.8.5:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.8.5.tgz#09e3e590d5584729a415f326210cb4adb2379d30"

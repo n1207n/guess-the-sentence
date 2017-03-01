@@ -49,6 +49,7 @@
     "koa-static": "^3.0.0",
     "material-ui": "^0.17.0",
     "mongoose": "^4.8.5",
+    "mongoose-fill": "^1.6.0",
     "object-assign": "4.1.0",
     "passport": "^0.3.2",
     "passport-google-auth": "^1.0.1",
