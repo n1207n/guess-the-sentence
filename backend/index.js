@@ -1,3 +1,5 @@
+'use strict';
+
 // Load your SECRET DATA from your .env file
 if (process.env.NODE_ENV != 'production') {
   require('dotenv').config({path: './.dev.env'});
