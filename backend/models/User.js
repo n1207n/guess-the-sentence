@@ -2,6 +2,10 @@
 
 import mongoose from 'mongoose-fill';
 
+/**
+ * A Mongoose schema for User document with timestamps
+ * @type {mongoose Schema}
+ */
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,

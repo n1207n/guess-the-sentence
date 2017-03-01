@@ -1,22 +1,21 @@
 'use strict';
 
-// Load your SECRET DATA from your .env file
-if (process.env.NODE_ENV != 'production') {
-  require('dotenv').config({path: './.dev.env'});
-} else {
-  require('dotenv').config({path: './.dev.env'});
-}
-
 import Koa from 'koa';
+
+// Load the app configuration
+import './config';
 
 import {connectDB} from './db';
 import middlewares from './middlewares';
 
 const app = new Koa();
 
+// Load the composed middlewares
 app.use(middlewares());
 
+// Start the Koa app server with MongoDB connection
 (async() => {
+  // It would try to open MongoDB connection first
   try {
     const dbURI = process.env.MONGODB_URI;
     const dbConnectionInfo = await connectDB(dbURI);
@@ -26,6 +25,8 @@ app.use(middlewares());
     console.error('Unable to connect to MongoDB');
   }
 
-  await app.listen(3001);
-  console.log(`Application started on port ${3001}`);
+  // Serve the app!!
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
+  console.log(`Application started on port ${port}`);
 })();
