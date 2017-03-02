@@ -7,11 +7,13 @@ import './config';
 
 import {connectDB} from './db';
 import middlewares from './middlewares';
+import routes from './routes';
 
 const app = new Koa();
 
 // Load the composed middlewares
 app.use(middlewares());
+app.use(routes());
 
 // Start the Koa app server with MongoDB connection
 (async() => {
@@ -20,13 +22,18 @@ app.use(middlewares());
     const dbURI = process.env.MONGODB_URI;
     const dbConnectionInfo = await connectDB(dbURI);
 
-    console.log(`Connected to ${dbConnectionInfo.host}:${dbConnectionInfo.port}/${dbConnectionInfo.name}`);
+    console.log(`MongoDB Connected to ${dbConnectionInfo.host}:${dbConnectionInfo.port}/${dbConnectionInfo.name}`);
   } catch (e) {
     console.error('Unable to connect to MongoDB');
   }
 
   // Serve the app!!
   const port = process.env.PORT || 3001;
-  await app.listen(port);
-  console.log(`Application started on port ${port}`);
+
+  try {
+    await app.listen(port);
+    console.log(`Application started on port ${port}`);
+  } catch (e) {
+    console.error(`Failed to run server on port ${port}. Is the port already used?`);
+  }
 })();

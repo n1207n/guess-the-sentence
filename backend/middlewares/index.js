@@ -28,6 +28,8 @@ import '../config';
  * @return {koa-compose object}
  */
 export default function middlewares() {
+  console.log("Loading middlewares...");
+
   return compose([
     // cors middleware is not compatible with Koa 2, so koa-convert is used
     convert(cors()),

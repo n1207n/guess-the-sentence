@@ -21,12 +21,12 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  }, {
-    timestamps: {
-      createdAt: 'createdAt',
-      updatedAt: 'updatedAt',
-    }
-  },
+  }
+}, {
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+  }
 });
 
 export default mongoose.model('User', UserSchema);
