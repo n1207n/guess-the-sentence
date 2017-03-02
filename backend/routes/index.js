@@ -10,7 +10,7 @@ const routerList = [{folder: 'api', prefix: '/api'}, ];
 // Credit goes to https://github.com/entria/koa-passport-mongoose-graphql/blob/master/src/server/routes/index.js
 export default function routes() {
   const reducedRouterEntries = routerList.reduce((accumulated, current) => {
-    const routes = importDir('./' + current.folder);
+    const routes = importDir(`./${current.folder}`);
     const router = new KoaRouter({
       prefix: current.prefix,
     });
@@ -22,6 +22,5 @@ export default function routes() {
     return [router.routes(), router.allowedMethods(), ...accumulated];
   }, []);
 
-  console.log("Loading routes...");
   return compose(reducedRouterEntries);
 };

@@ -2,6 +2,10 @@
 
 import User from '../../models/User';
 
+export default (router) => {
+  router.post('userRegister', '/auth/register', register);
+}
+
 async function register(ctx, next) {
   const {name, email, password} = ctx.request.body;
 
@@ -29,8 +33,4 @@ async function register(ctx, next) {
   }
 
   await next();
-}
-
-export default (router) => {
-  router.post('userRegister', '/auth/register', register);
 }

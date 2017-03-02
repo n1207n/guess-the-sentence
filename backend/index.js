@@ -13,7 +13,10 @@ const app = new Koa();
 
 // Load the composed middlewares
 app.use(middlewares());
+console.log('Loaded middlewares');
+
 app.use(routes());
+console.log('Loaded routes');
 
 // Start the Koa app server with MongoDB connection
 (async() => {
@@ -28,7 +31,7 @@ app.use(routes());
   }
 
   // Serve the app!!
-  const port = process.env.PORT || 3001;
+  const port = Number(process.env.PORT) || 3001;
 
   try {
     await app.listen(port);
