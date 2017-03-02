@@ -9,10 +9,10 @@ import bodyParser from 'koa-bodyparser';
 import createLogger from 'concurrency-logger';
 import compress from 'koa-compress';
 
-import session from './session';
+import sessionMiddleware from './session';
 
 // Load the app configuration
-import './config';
+import '../config';
 
 /**
  * A JS function that returns a composed Koa middleware set
@@ -34,7 +34,7 @@ export default function middlewares() {
     helmet,
     compress,
     bodyParser,
-    session,
+    sessionMiddleware,
     createLogger,
   ]);
 }
