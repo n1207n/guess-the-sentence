@@ -10,19 +10,14 @@ async function register(ctx, next) {
   const {name, email, password} = ctx.request.body;
 
   if (name != undefined && email != undefined && password != undefined) {
-    let user = await User.findOne({email});
+    let user = await User.findOne({email}).exec();
 
-    if (user !== undefined) {
-      user = new User({
-        name,
-        email
-      });
-
-      await user.save();
+    if (user === null) {
+      user = new User({name, email, password});
+      user.save();
 
       ctx.status = 201;
       ctx.body = {user};
-
     } else {
       ctx.status = 400;
       ctx.body = {status: 'error', message: "This e-mail is already registered."};

@@ -3,6 +3,8 @@
 
 import mongoose from 'mongoose';
 
+mongoose.Promise = global.Promise;
+
 /**
  * A JS function which returns Promise to handle MongoDB connection
  * @param  {String} uri  A full MongoDB URI
