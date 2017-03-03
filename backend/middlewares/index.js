@@ -3,11 +3,8 @@
 import compose from 'koa-compose';
 import convert from 'koa-convert';
 
-import helmet from 'koa-helmet';
-import cors from 'koa-cors';
-import bodyParser from 'koa-bodyparser';
-import createLogger from 'concurrency-logger';
-import compress from 'koa-compress';
+import cors from 'kcors';
+import logger from 'koa-logger';
 
 import sessionMiddleware from './session';
 
@@ -19,8 +16,6 @@ import '../config';
  *
  * Used middlewares:
  * - CORS
- * - Helmet security HTTP headers
- * - HTTP compression
  * - HTTP request auto body parsing
  * - Session based on MongoDB
  * - Concurrency Logger
@@ -29,14 +24,8 @@ import '../config';
  */
 export default function middlewares() {
   return compose([
-    // cors middleware is not compatible with Koa 2, so koa-convert is used
-    convert(cors()),
-    helmet,
-    compress,
-    bodyParser,
+    logger,
+    cors,
     sessionMiddleware,
-    convert(createLogger({
-      timestamp: true
-    })),
   ]);
 }

@@ -1,5 +1,7 @@
 'use strict';
 
+import asyncBusboy from 'async-busboy';
+
 import User from '../../models/User';
 
 export default (router) => {
@@ -7,7 +9,9 @@ export default (router) => {
 }
 
 async function register(ctx, next) {
-  const {name, email, password} = ctx.request.body;
+  const {files, fields} = await asyncBusboy(ctx.req);
+
+  const {name, email, password} = fields;
 
   if (name != undefined && email != undefined && password != undefined) {
     let user = await User.findOne({email});
@@ -31,6 +35,4 @@ async function register(ctx, next) {
     ctx.status = 400;
     ctx.body = {status: 'error', message: "name, email, and password are required in valid format."};
   }
-
-  await next();
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-import KoaRouter from 'koa-router';
+import Router from 'koa-router';
 import compose from 'koa-compose';
 
 import importDir from 'import-dir';
@@ -11,7 +11,7 @@ const routerList = [{folder: 'api', prefix: '/api'}, ];
 export default function routes() {
   const reducedRouterEntries = routerList.reduce((accumulated, current) => {
     const routes = importDir(`./${current.folder}`);
-    const router = new KoaRouter({
+    let router = new Router({
       prefix: current.prefix,
     });
 
