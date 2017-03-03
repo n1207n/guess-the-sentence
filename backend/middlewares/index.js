@@ -1,31 +1,32 @@
 'use strict';
 
-import compose from 'koa-compose';
 import convert from 'koa-convert';
 
 import cors from 'kcors';
-import logger from 'koa-logger';
+import createLogger from 'concurrency-logger';
+import helmet from "koa-helmet";
+import bodyparser from "koa-bodyparser";
 
 import sessionMiddleware from './session';
 
-// Load the app configuration
-import '../config';
-
 /**
- * A JS function that returns a composed Koa middleware set
+ * A JS function that applies each middleware to passed in app
  *
  * Used middlewares:
- * - CORS
- * - HTTP request auto body parsing
- * - Session based on MongoDB
  * - Concurrency Logger
+ * - Session based on MongoDB
+ * - CORS
+ * - Security headers
+ * - HTTP request auto body parsing
  *
- * @return {koa-compose object}
+ * @param  {koa app object} app
  */
-export default function middlewares() {
-  return compose([
-    logger,
-    cors,
-    sessionMiddleware,
-  ]);
+export default function middlewares(app) {
+  app.use(createLogger({
+    timestamp: true,
+  }));
+  app.use(convert(sessionMiddleware));
+  app.use(cors());
+  app.use(helmet());
+  app.use(bodyparser());
 }

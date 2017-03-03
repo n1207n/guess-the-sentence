@@ -11,12 +11,12 @@ import routes from './routes';
 
 const app = new Koa();
 
-app.use(routes());
-console.log('Loaded routes');
+// Load the composed middlewares
+middlewares(app);
+console.log('Loaded middlewares');
 
-// // Load the composed middlewares
-// app.use(middlewares());
-// console.log('Loaded middlewares');
+routes(app);
+console.log('Loaded routes');
 
 // Start the Koa app server with MongoDB connection
 (async() => {
@@ -28,6 +28,7 @@ console.log('Loaded routes');
     console.log(`MongoDB Connected to ${dbConnectionInfo.host}:${dbConnectionInfo.port}/${dbConnectionInfo.name}`);
   } catch (e) {
     console.error('Unable to connect to MongoDB');
+    process.exit();
   }
 
   // Serve the app!!
