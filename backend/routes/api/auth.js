@@ -1,9 +1,12 @@
 'use strict';
 
-import User from '../../models/User';
+import {User} from '../../models';
+
+import {generateToken} from '../../auth';
 
 export default (router) => {
-  router.post('userRegister', '/auth/register', register);
+  router.post('userRegister', '/auth/register',
+    register, generateToken());
 }
 
 async function register(ctx, next) {
@@ -16,8 +19,9 @@ async function register(ctx, next) {
       user = new User({name, email, password});
       user.save();
 
-      ctx.status = 201;
-      ctx.body = {user};
+      ctx.passport = {user: user._id};
+
+      return next();
     } else {
       ctx.status = 400;
       ctx.body = {status: 'error', message: "This e-mail is already registered."};
@@ -26,6 +30,4 @@ async function register(ctx, next) {
     ctx.status = 400;
     ctx.body = {status: 'error', message: "name, email, and password are required in valid format."};
   }
-
-  await next();
 }
