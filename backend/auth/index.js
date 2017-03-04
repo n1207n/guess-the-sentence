@@ -39,19 +39,15 @@ export function generateToken() {
   return async ctx => {
     const {user} = ctx.passport;
 
-    debugger;
-
-    if (user === false) {
+    if (user === false || user === undefined) {
       ctx.status = 401;
     } else {
-      const jwtToken = `JWT ${jwt.sign({id: user}, process.env.JWT_SECRET)}`
-
-      const currentUser = await User.findOne({_id: user});
+      const jwtToken = `JWT ${jwt.sign({id: user._id}, process.env.JWT_SECRET)}`;
 
       ctx.status = 200;
       ctx.body = {
         jwtToken,
-        user: currentUser
+        user
       };
     }
   };

@@ -22,7 +22,9 @@ const ChatSchema = mongoose.Schema({
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-  }
+  },
+
+  collection: 'Chat',
 });
 
-export default mongoose.model('Chat', ChatSchema);
+export default mongoose.model('Chat', ChatSchema, 'Chat');

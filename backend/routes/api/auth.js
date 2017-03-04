@@ -19,7 +19,7 @@ async function register(ctx, next) {
       user = new User({name, email, password});
       user.save();
 
-      ctx.passport = {user: user._id};
+      ctx.passport = {user: user};
 
       return next();
     } else {
