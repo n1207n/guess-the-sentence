@@ -6,6 +6,10 @@ import {hasNoUndefinedFields} from '../../utils';
 
 import {authenticateByJWT} from '../../auth';
 
+/**
+ * Room middleware that mutates incoming router object to add routes
+ * @param  {koa-router Router} router
+ */
 export default (router) => {
   router
     .get(
@@ -32,7 +36,14 @@ export default (router) => {
       deleteRoom);
 };
 
+/**
+ * A middleware to get a Room object from url parameter room_id
+ * @param  {koa.Context}   ctx
+ * @param  {Function}      next
+ * @return {Promise}
+ */
 async function grabRoom(ctx, next) {
+  // Query a Room object without creator's password field
   const room = await Room.findById(ctx.params.room_id)
     .populate("creator", "-password").exec();
 
@@ -45,6 +56,12 @@ async function grabRoom(ctx, next) {
   }
 };
 
+/**
+ * A middleware to check a queried Room object's creator against current User
+ * @param  {koa.Context}   ctx
+ * @param  {Function}      next
+ * @return {Promise}
+ */
 async function checkCreator(ctx, next) {
   const {user, room} = ctx.state;
 
@@ -56,8 +73,17 @@ async function checkCreator(ctx, next) {
   }
 };
 
+/**
+ * A middleware to get Room objects of 20 or
+ * a GET parameter value `limit`
+ * @param  {koa.Context}   ctx
+ * @return {Promise}
+ */
 async function getRoomList(ctx) {
-  const rooms = await Room.find().limit(20).exec();
+  // Determine the # of objects to get
+  const limit = Number(ctx.query.limit) || 20;
+
+  const rooms = await Room.find().limit(limit).exec();
   let data = [];
 
   if (rooms !== null) {
@@ -68,6 +94,11 @@ async function getRoomList(ctx) {
   ctx.body = {data};
 };
 
+/**
+ * A middleware to get one Room object for its ID
+ * @param  {koa.Context}   ctx
+ * @return {Promise}
+ */
 async function getRoomDetail(ctx) {
   const {room} = ctx.state;
 
@@ -75,7 +106,13 @@ async function getRoomDetail(ctx) {
   ctx.body = room;
 }
 
+/**
+ * A middleware to create a new Room object
+ * @param  {koa.Context}   ctx
+ * @return {Promise}
+ */
 async function createRoom(ctx) {
+  // Check for required fields (e.g `name`) from parsed request body
   if (hasNoUndefinedFields(ctx.request.body, ["name", ]) === false) {
     ctx.status = 400;
     ctx.body = {message: "name fields are required to create a room."};
@@ -83,14 +120,16 @@ async function createRoom(ctx) {
     const {name} = ctx.request.body;
     const roomLookup = await Room.findOne({name}).exec();
 
+    // If there is no existing room
     if (roomLookup === null) {
       const room = new Room({name, creator: ctx.state.user});
       const result = await room.save();
 
+      // Successful save
       if (result !== null) {
         const resultObject = result.toObject();
 
-        // Hide the password ;)
+        // Hide the password from its plain JS object ;)
         delete resultObject.creator.password;
 
         ctx.status = 200;
@@ -106,6 +145,11 @@ async function createRoom(ctx) {
   }
 };
 
+/**
+ * A middleware to update a Room object
+ * @param  {koa.Context}   ctx
+ * @return {Promise}
+ */
 async function updateRoom(ctx) {
   const {name, creator, attendees, timer, answer} = ctx.request.body;
   let room = ctx.state.room;
@@ -118,7 +162,8 @@ async function updateRoom(ctx) {
 
   const result = await room.save();
 
-  if (result !== undefined) {
+  // Successful save
+  if (result !== null) {
     ctx.status = 200;
     ctx.body = {room};
   } else {
@@ -127,10 +172,16 @@ async function updateRoom(ctx) {
   }
 };
 
+/**
+ * A middleware to delete a Room object
+ * @param  {koa.Context}   ctx
+ * @return {Promise}
+ */
 async function deleteRoom(ctx) {
   const {room} = ctx.state;
   const result = await room.remove();
 
+  // Successful save
   if (result !== null) {
     ctx.status = 204;
     ctx.body = {};
