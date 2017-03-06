@@ -2,8 +2,6 @@
 
 import mongoose from 'mongoose';
 
-import {UserSchema} from '../models';
-
 /**
  * A Mongoose schema for Room document with timestamps
  * @type {mongoose Schema}
@@ -15,12 +13,13 @@ export const RoomSchema = mongoose.Schema({
   },
 
   creator: {
-    type: UserSchema,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
 
   attendees: {
-    type: [UserSchema],
+    type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     required: false,
   },
 
@@ -40,4 +39,4 @@ export const RoomSchema = mongoose.Schema({
   }
 });
 
-export const Room = mongoose.model('Room', RoomSchema);
+export const Room = mongoose.model('Room', RoomSchema, 'Room');
