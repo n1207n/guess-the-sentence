@@ -33,15 +33,15 @@ export default function auth(app) {
   app.use(passport.session());
 }
 
-export async function authenticateByJWT() {
+export function authenticateByJWT() {
   return async (ctx, next) => {
     await passport.authenticate('jwt', async (err, user, infoMessage) => {
       if (user === false) {
         ctx.status = 401;
-        ctx.body = infoMessage;
+        ctx.body = {message: infoMessage};
       } else {
         await ctx.login(user);
-        await next();
+        return next();
       }
     })(ctx, next);
   };
@@ -52,10 +52,10 @@ export function authenticate() {
     await passport.authenticate('local', async (err, user, infoMessage) => {
       if (user === false) {
         ctx.status = 401;
-        ctx.body = infoMessage;
+        ctx.body = {message: infoMessage};
       } else {
         await ctx.login(user);
-        await next();
+        return next();
       }
     })(ctx, next);
   };

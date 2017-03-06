@@ -11,13 +11,13 @@ export default new LocalStrategy(options, async (email, password, done) => {
     const user = await User.findOne({email}).exec();
 
     if (user === null) {
-      done(null, false, {message: "Incorrect email"});
+      done(null, false, "Incorrect email");
     }
 
     else if (user.password === password) {
-      done(null, user, {message: "OK"});
+      done(null, user, "OK");
     } else {
-      done(null, false, {message: "Incorrect password"});
+      done(null, false, "Incorrect password");
     }
   } catch (e) {
     done(e);
