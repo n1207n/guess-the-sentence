@@ -34,7 +34,17 @@ export default function auth(app) {
 }
 
 export async function authenticateByJWT() {
-  return passport.authenticate('jwt');
+  return async (ctx, next) => {
+    await passport.authenticate('jwt', async (err, user, infoMessage) => {
+      if (user === false) {
+        ctx.status = 401;
+        ctx.body = infoMessage;
+      } else {
+        await ctx.login(user);
+        await next();
+      }
+    })(ctx, next);
+  };
 }
 
 export function authenticate() {
@@ -51,12 +61,24 @@ export function authenticate() {
   };
 }
 
+export function checkAuth() {
+  return async (ctx, next) => {
+    if (ctx.isAuthenticated()) {
+      return next();
+    } else {
+      ctx.status = 401;
+      ctx.body = {message: "Authentication is required."};
+    }
+  }
+}
+
 export function generateToken() {
   return async ctx => {
     const {user} = ctx.state;
 
     if (user === undefined) {
-      ctx.status = 401;
+      ctx.status = 400;
+      ctx.body = {"message": "Failed to generate token. Please try again."};
     } else {
       const jwtToken = `JWT ${jwt.sign({id: user._id}, process.env.JWT_SECRET)}`;
 
