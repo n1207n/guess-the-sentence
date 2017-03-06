@@ -1,7 +1,5 @@
 'use strict';
 
-import {User} from '../../models';
-
 import {authenticateByJWT} from '../../auth';
 
 export default (router) => {
@@ -29,7 +27,7 @@ async function updateUserData(ctx) {
 
     const result = await user.save();
 
-    if (result !== undefined) {
+    if (result !== null) {
       ctx.status = 200;
       ctx.body = ctx.state.user;
     } else {

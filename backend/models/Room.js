@@ -26,7 +26,7 @@ const RoomSchema = mongoose.Schema({
 
   timer: {
     type: Number,
-    required: true,
+    required: false,
   },
 
   answer: {
@@ -37,9 +37,7 @@ const RoomSchema = mongoose.Schema({
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-  },
-
-  collection: 'Room',
+  }
 });
 
-export default mongoose.model('Room', RoomSchema, 'Room');
+export default mongoose.model('Room', RoomSchema);
