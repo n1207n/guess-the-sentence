@@ -48,7 +48,7 @@ async function grabRoom(ctx, next) {
 async function checkCreator(ctx, next) {
   const {user, room} = ctx.state;
 
-  if (room.creator._id !== user._id) {
+  if (room.creator.id !== user.id) {
     ctx.status = 403;
     ctx.body = {message: "You are not a room creator"};
   } else {
@@ -102,6 +102,7 @@ async function createRoom(ctx) {
 };
 
 async function updateRoom(ctx) {
+  const {name, creator, attendees, timer, answer} = ctx.request.body;
   let room = ctx.state.room;
 
   room.name = name || room.name;
