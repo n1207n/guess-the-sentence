@@ -1,19 +1,20 @@
 // @flow
 
+import _ from 'lodash';
+
 /**
  * Return false if any of the object properties is undefined
  * @param  {Object} src - Target object to evaluate its properties
  * @param  {Array<String>} targetProperties - An optional string array of keys
  * @return {boolean}
  */
-export function checkUndefinedFields(
+export function hasNoUndefinedFields(
   src: Object, targetProperties?: Array<String>) {
-
   if (targetProperties === undefined) {
     return Object
       .keys(src)
-      .every((element) => src[element] !== undefined);
+      .every((key) => _.has(src, key) && src[key] !== undefined);
   } else {
-    return targetProperties.every((element) => src[element] !== undefined);
+    return targetProperties.every((key) => _.has(src, key) && src[key] !== undefined);
   }
 }

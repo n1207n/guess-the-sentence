@@ -2,7 +2,7 @@
 
 import {Room} from '../../models';
 
-import {checkUndefinedFields} from '../../utils';
+import {hasNoUndefinedFields} from '../../utils';
 
 import {authenticateByJWT} from '../../auth';
 
@@ -18,7 +18,8 @@ export default (router) => {
       createRoom)
     .get('roomDetail', '/room/:room_id',
       authenticateByJWT(),
-      grabRoom)
+      grabRoom,
+      getRoomDetail)
     .patch('roomUpdate', '/room/:room_id',
       authenticateByJWT(),
       grabRoom,
@@ -32,7 +33,8 @@ export default (router) => {
 };
 
 async function grabRoom(ctx, next) {
-  const room = await Room.findOne({_id: ctx.params.room_id}).exec();
+  const room = await Room.findById(ctx.params.room_id)
+    .populate("creator").exec();
 
   if (room === null) {
     ctx.status = 404;
@@ -66,22 +68,35 @@ async function getRoomList(ctx) {
   ctx.body = {data};
 };
 
+async function getRoomDetail(ctx) {
+  const {room} = ctx.state;
+
+  ctx.status = 200;
+  ctx.body = room;
+}
+
 async function createRoom(ctx) {
-  if (checkUndefinedFields(ctx.request.body, ["name", ])) {
+  if (hasNoUndefinedFields(ctx.request.body, ["name", ]) === false) {
     ctx.status = 400;
     ctx.body = {message: "name fields are required to create a room."};
   } else {
     const {name} = ctx.request.body;
+    const roomLookup = await Room.findOne({name}).exec();
 
-    const room = new Room(name, creator: ctx.state.user);
-    const result = await room.save();
+    if (roomLookup === null) {
+      const room = new Room({name, creator: ctx.state.user});
+      const result = await room.save();
 
-    if (result !== null) {
-      ctx.status = 200;
-      ctx.body = {room};
+      if (result !== null) {
+        ctx.status = 200;
+        ctx.body = {room};
+      } else {
+        ctx.status = 400;
+        ctx.body = {status: 'error', message: "Failed to create a room. Pleas try again."};
+      }
     } else {
       ctx.status = 400;
-      ctx.body = {status: 'error', message: "Failed to create a room. Pleas try again."};
+      ctx.body = {status: 'error', message: "The room already exists."};
     }
   }
 };
