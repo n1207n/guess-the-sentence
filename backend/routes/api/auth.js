@@ -2,11 +2,14 @@
 
 import {User} from '../../models';
 
-import {generateToken} from '../../auth';
+import {generateToken, authenticate} from '../../auth';
 
 export default (router) => {
   router.post('userRegister', '/auth/register',
     register, generateToken());
+
+  router.post('userSignIn', '/auth/signin',
+    authenticate(), generateToken());
 }
 
 async function register(ctx, next) {
@@ -19,9 +22,8 @@ async function register(ctx, next) {
       user = new User({name, email, password});
       user.save();
 
-      ctx.passport = {user: user};
-
-      return next();
+      await ctx.login(user);
+      await next();
     } else {
       ctx.status = 400;
       ctx.body = {status: 'error', message: "This e-mail is already registered."};

@@ -7,13 +7,18 @@ import './config';
 
 import {connectDB} from './db';
 import middlewares from './middlewares';
+import auth from './auth';
 import routes from './routes';
 
 const app = new Koa();
+app.keys = [process.env.SESSION_SECRET,];
 
 // Load the composed middlewares
 middlewares(app);
 console.log('Loaded middlewares');
+
+auth(app);
+console.log('Loaded auth');
 
 routes(app);
 console.log('Loaded routes');
