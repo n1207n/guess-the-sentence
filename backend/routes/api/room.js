@@ -34,7 +34,7 @@ export default (router) => {
 
 async function grabRoom(ctx, next) {
   const room = await Room.findById(ctx.params.room_id)
-    .populate("creator").exec();
+    .populate("creator", "-password").exec();
 
   if (room === null) {
     ctx.status = 404;
@@ -88,8 +88,13 @@ async function createRoom(ctx) {
       const result = await room.save();
 
       if (result !== null) {
+        const resultObject = result.toObject();
+
+        // Hide the password ;)
+        delete resultObject.creator.password;
+
         ctx.status = 200;
-        ctx.body = {room};
+        ctx.body = {resultObject};
       } else {
         ctx.status = 400;
         ctx.body = {status: 'error', message: "Failed to create a room. Pleas try again."};

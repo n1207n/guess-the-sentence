@@ -4,6 +4,10 @@ import {User} from '../../models';
 
 import {generateToken, authenticate} from '../../auth';
 
+/**
+ * Auth middleware that mutates incoming router object to add routes
+ * @param  {koa-router object} router
+ */
 export default (router) => {
   router.post('userRegister', '/auth/register',
     register, generateToken());

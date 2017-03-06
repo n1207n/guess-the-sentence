@@ -80,12 +80,17 @@ export function generateToken() {
       ctx.status = 400;
       ctx.body = {"message": "Failed to generate token. Please try again."};
     } else {
-      const jwtToken = `JWT ${jwt.sign({id: user._id}, process.env.JWT_SECRET)}`;
+      const jwtToken = `JWT ${jwt.sign({id: user.id}, process.env.JWT_SECRET)}`;
+
+      const userObject = ctx.state.user.toObject();
+
+      // Hide the password ;)
+      delete userObject.password;
 
       ctx.status = 200;
       ctx.body = {
         jwtToken,
-        user
+        userObject
       };
     }
   };
