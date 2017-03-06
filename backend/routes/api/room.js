@@ -67,13 +67,13 @@ async function getRoomList(ctx) {
 };
 
 async function createRoom(ctx) {
-  if (checkUndefinedFields(ctx.request.body, ["name", "creator"])) {
+  if (checkUndefinedFields(ctx.request.body, ["name", ])) {
     ctx.status = 400;
-    ctx.body = {message: "name and creator fields are required to create a room."};
+    ctx.body = {message: "name fields are required to create a room."};
   } else {
-    const {name, creator} = ctx.request.body;
+    const {name} = ctx.request.body;
 
-    const room = new Room(name, creator);
+    const room = new Room(name, creator: ctx.state.user);
     const result = await room.save();
 
     if (result !== null) {

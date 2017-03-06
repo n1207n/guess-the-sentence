@@ -27,4 +27,4 @@ export const ChatSchema = mongoose.Schema({
   collection: 'Chat',
 });
 
-export default mongoose.model('Chat', ChatSchema, 'Chat');
+export const Chat = mongoose.model('Chat', ChatSchema, 'Chat');
