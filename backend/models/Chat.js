@@ -2,17 +2,17 @@
 
 import mongoose from 'mongoose';
 
-import {User} from '../models';
+import {UserSchema} from '../models';
 
 /**
  * A Mongoose schema for Chat document with timestamps
  * @type {mongoose Schema}
  */
-const ChatSchema = mongoose.Schema({
+export const ChatSchema = mongoose.Schema({
   user: {
-    type: User,
+    type: UserSchema,
     required: true,
-  }
+  },
 
   message: {
     type: String,

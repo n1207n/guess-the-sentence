@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
  * A Mongoose schema for User document with timestamps
  * @type {mongoose Schema}
  */
-const UserSchema = mongoose.Schema({
+export const UserSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,

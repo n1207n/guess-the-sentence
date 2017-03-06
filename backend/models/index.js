@@ -1,3 +1,3 @@
-export User from './User';
-export Room from './Room';
-export Chat from './Chat';
+export {User, UserSchema} from './User';
+export {Room, RoomSchema} from './Room';
+export {Chat, ChatSchema} from './Chat';

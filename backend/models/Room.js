@@ -2,25 +2,25 @@
 
 import mongoose from 'mongoose';
 
-import {User} from '../models';
+import {UserSchema} from '../models';
 
 /**
  * A Mongoose schema for Room document with timestamps
  * @type {mongoose Schema}
  */
-const RoomSchema = mongoose.Schema({
+export const RoomSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
   },
 
   creator: {
-    type: User,
+    type: UserSchema,
     required: true,
-  }
+  },
 
   attendees: {
-    type: [User],
+    type: [UserSchema],
     required: false,
   },
 
