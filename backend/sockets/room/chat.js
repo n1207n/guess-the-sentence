@@ -1,7 +1,7 @@
 'use strict';
 
 import IO from 'koa-socket';
-import {authorize} from 'koa-socket-passport';
+// import {authorize} from 'koa-socket-passport';
 
 import sessionMiddleware from '../../middlewares/session';
 
@@ -15,23 +15,23 @@ export default (app) => {
   const io = new IO('sockets');
   io.attach(app);
 
-  io.use(authorize({
-    key: 'koa.sid',
-    secret: app.keys,
-    store: sessionMiddleware,
-    success: function onAuthorizeSuccess(ksp) {
-      var user = ksp.user;
-      var session = ksp.session;
-
-      session.authenticted_users_count = session.authenticted_users_count || 0;
-      session.authenticted_users_count++;
-    },
-    fail: function onAuthorizeFail(err, ksp) {
-      if (err.critical) {
-        throw Error('Socket Authorization Failed. ', err.critical, err);
-      }
-    }
-  }));
+  // io.use(authorize({
+  //   key: 'koa.sid',
+  //   secret: app.keys,
+  //   store: sessionMiddleware,
+  //   success: function onAuthorizeSuccess(ksp) {
+  //     var user = ksp.user;
+  //     var session = ksp.session;
+  //
+  //     session.authenticted_users_count = session.authenticted_users_count || 0;
+  //     session.authenticted_users_count++;
+  //   },
+  //   fail: function onAuthorizeFail(err, ksp) {
+  //     if (err.critical) {
+  //       throw Error('Socket Authorization Failed. ', err.critical, err);
+  //     }
+  //   }
+  // }));
 
   io.on('connection', handleConnect);
   io.on('disconnect', handleDisconnect);

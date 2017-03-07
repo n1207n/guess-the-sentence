@@ -19,9 +19,7 @@ export default new LocalStrategy(options, async (email, password, done) => {
 
     if (user === null) {
       done(null, false, "Incorrect email");
-    }
-
-    else if (user.password === password) {
+    } else if (user.password === password) {
       done(null, user, "OK");
     } else {
       done(null, false, "Incorrect password");
