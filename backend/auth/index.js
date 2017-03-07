@@ -13,7 +13,13 @@ passport.use('jwt', jwtStrategy);
 passport.use('local', localStrategy);
 
 passport.serializeUser((user, done) => {
-  done(null, user._id);
+  (async () => {
+    try {
+      done(null, user._id);
+    } catch (error) {
+      done(error);
+    }
+  })();
 });
 
 passport.deserializeUser((id, done) => {
