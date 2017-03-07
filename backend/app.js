@@ -9,6 +9,7 @@ import {connectDB} from './db';
 import middlewares from './middlewares';
 import auth from './auth';
 import routes from './routes';
+import sockets from './sockets';
 
 const app = new Koa();
 app.keys = [process.env.SESSION_SECRET,];
@@ -22,6 +23,8 @@ console.log('Loaded auth');
 
 routes(app);
 console.log('Loaded routes');
+
+sockets(app);
 
 // Start the Koa app server with MongoDB connection
 (async() => {

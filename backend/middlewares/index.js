@@ -19,7 +19,7 @@ import sessionMiddleware from './session';
  * - Security headers
  * - HTTP request auto body parsing
  *
- * @param  {koa app object} app
+ * @param  {Koa} app
  */
 export default function middlewares(app) {
   app.use(createLogger({
